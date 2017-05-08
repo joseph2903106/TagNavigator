@@ -6,7 +6,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
@@ -40,11 +39,9 @@ import java.util.List;
 public abstract class JActivity extends FragmentActivity
 {
     protected String TAG = ((Object) this).getClass().getSimpleName();
-    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     protected ProgressDialog loading = null;
     private Dialog messageDialg;
 
-    private boolean isFrontVisible = false;
     protected final Handler handler = new Handler();
     private boolean isAlive = true;
 
@@ -86,7 +83,6 @@ public abstract class JActivity extends FragmentActivity
     protected void onResume()
     {
         super.onResume();
-        isFrontVisible = true;
         UIAdjuster.closeKeyBoard(this);
     }
 
@@ -94,7 +90,6 @@ public abstract class JActivity extends FragmentActivity
     protected void onPause()
     {
         super.onPause();
-        isFrontVisible = false;
     }
 
     public void dissmissMessageDialog()
@@ -232,12 +227,6 @@ public abstract class JActivity extends FragmentActivity
         return true;
     }
 
-    public boolean isReclaim()
-    {
-//		return isFinishing() || isDestroyed();
-        return isFinishing();
-    }
-
     public void updateLoading(String statusText)
     {
         if (loading == null)
@@ -300,11 +289,6 @@ public abstract class JActivity extends FragmentActivity
         }
     }
 
-    protected void onError()
-    {
-        backPress();
-    }
-
     protected boolean backPress()
     {
         finish();
@@ -324,23 +308,6 @@ public abstract class JActivity extends FragmentActivity
             }
         }
         return super.onKeyDown(keyCode, event);
-    }
-
-    public Bitmap takeScreenShot()
-    {
-        return takeScreenShot(findViewById(android.R.id.content).getRootView());
-    }
-
-    public Bitmap takeScreenShot(View rootView)
-    {
-        rootView.destroyDrawingCache();
-        rootView.setDrawingCacheEnabled(true);
-        rootView.buildDrawingCache(true);
-        rootView.invalidate();
-        final Bitmap map = rootView.getDrawingCache(true).copy(Bitmap.Config.ARGB_8888, false);
-        rootView.setDrawingCacheEnabled(false);
-        rootView.destroyDrawingCache();
-        return map;
     }
 
     public void commitFragment(int replaceId, Fragment fragment)
@@ -592,8 +559,4 @@ public abstract class JActivity extends FragmentActivity
         android.os.Process.killProcess(pid);
     }
 
-    public boolean isFrontVisible()
-    {
-        return isFrontVisible;
-    }
 }

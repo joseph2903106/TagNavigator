@@ -110,7 +110,6 @@ public class AppManager
         return false;
     }
 
-
     public static void clearAllInstance()
     {
         if (activityMap != null)

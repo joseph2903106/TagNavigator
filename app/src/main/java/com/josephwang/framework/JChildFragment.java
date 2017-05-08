@@ -26,7 +26,6 @@ public abstract class JChildFragment<Parent extends JParentFragment> extends JFr
         {
             throw new IllegalArgumentException("Must be combined with JTabActivity!!!");
         }
-//        checkParent();
     }
 
     public Parent getJParentFragment()

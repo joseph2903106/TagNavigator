@@ -1,11 +1,7 @@
 package com.josephwang.framework;
 
 import android.app.Activity;
-import android.app.ActivityManager;
-import android.app.ActivityManager.RunningTaskInfo;
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -19,8 +15,6 @@ import com.josephwang.util.JUtil;
 import com.josephwang.util.ui.JDialog;
 import com.josephwang.util.ui.UIAdjuster;
 import com.tabnavigator.R;
-
-import java.util.List;
 
 
 public abstract class JFragment extends Fragment implements View.OnKeyListener
@@ -56,10 +50,7 @@ public abstract class JFragment extends Fragment implements View.OnKeyListener
         {
             this.savedInstanceState = savedInstanceState;
         }
-
-        // singleErrorDialog = new SingleDialog(getActivity());
         UIAdjuster.closeKeyBoard(getActivity());
-        // // 註冊監聽
     }
 
     @Override
@@ -67,9 +58,6 @@ public abstract class JFragment extends Fragment implements View.OnKeyListener
     {
         JLog.d(JLog.JosephWang, TAG + " onResume");
         super.onResume();
-
-        // if (bundledReceiver != null)
-        // bundledReceiver.registerAllEvent(getActivity());
         UIAdjuster.closeKeyBoard(getActivity());
     }
 
@@ -122,7 +110,8 @@ public abstract class JFragment extends Fragment implements View.OnKeyListener
     public void cancelLoading()
     {
         if (!isReclaim() &&
-                loading != null && loading.isShowing())
+            loading != null &&
+            loading.isShowing())
         {
             loading.dismiss();
             loading = null;
@@ -138,25 +127,6 @@ public abstract class JFragment extends Fragment implements View.OnKeyListener
         JLog.d(JLog.JosephWang, TAG + " onPause");
         super.onPause();
         cancelLoading();
-        // unregisterAllBundledAction();
-    }
-
-    public boolean isLastOneActivity()
-    {
-        ActivityManager am = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
-        List<RunningTaskInfo> tasks = am.getRunningTasks(1);
-        if (!tasks.isEmpty())
-        {
-            if (tasks.get(0).numActivities == 1)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        return false;
     }
 
     public void onFinish()
@@ -222,22 +192,6 @@ public abstract class JFragment extends Fragment implements View.OnKeyListener
         JLog.d(JLog.JosephWang, TAG + " onDestroyView");
         cancelLoading();
         super.onDestroyView();
-    }
-
-    public Bitmap takeScreenShot()
-    {
-        return takeScreenShot(getActivity().findViewById(android.R.id.content).getRootView());
-    }
-
-    public Bitmap takeScreenShot(View rootView)
-    {
-        rootView.destroyDrawingCache();
-        rootView.buildDrawingCache();
-        rootView.invalidate();
-        rootView.setDrawingCacheEnabled(true);
-        final Bitmap map = rootView.getDrawingCache(true).copy(Bitmap.Config.ARGB_8888, false);
-        rootView.destroyDrawingCache();
-        return map;
     }
 
     public void commitFragment(int replaceId, Fragment fragment)
