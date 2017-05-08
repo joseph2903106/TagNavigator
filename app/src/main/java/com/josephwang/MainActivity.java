@@ -22,34 +22,49 @@ public class MainActivity extends JTabActivity
 {
     @BindView(R.id.main_page_count)
     TextView mainPageCount;
+
     @BindView(R.id.main_page_button)
     RadioButton mainPageButton;
+
     @BindView(R.id.main_page_container)
     LinearLayout mainPageContainer;
+
     @BindView(R.id.wine_count)
     TextView wineCount;
+
     @BindView(R.id.wine_button)
     RadioButton wineButton;
+
     @BindView(R.id.wine_container)
     LinearLayout wineContainer;
+
     @BindView(R.id.discover_count)
     TextView discoverCount;
+
     @BindView(R.id.discover_button)
     RadioButton discoverButton;
+
     @BindView(R.id.discover_container)
     LinearLayout discoverContainer;
+
     @BindView(R.id.mylist_count)
     TextView mylistCount;
+
     @BindView(R.id.mylist_button)
     RadioButton mylistButton;
+
     @BindView(R.id.mylist_container)
     LinearLayout mylistContainer;
+
     @BindView(R.id.account_count)
     TextView accountCount;
+
     @BindView(R.id.account_button)
     RadioButton accountButton;
+
     @BindView(R.id.account_container)
     LinearLayout accountContainer;
+
     @BindView(R.id.tool_bar)
     LinearLayout toolBar;
 
@@ -69,6 +84,8 @@ public class MainActivity extends JTabActivity
         discoverButton.setOnClickListener(clickListener);
         mylistButton.setOnClickListener(clickListener);
         accountButton.setOnClickListener(clickListener);
+
+        discoverButton.performClick();
     }
 
     private final View.OnClickListener clickListener = new View.OnClickListener()
