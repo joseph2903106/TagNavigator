@@ -39,7 +39,7 @@ public class LoginFragment extends JParentFragment
             @Override
             public void onClick(View v)
             {
-                commitChildFragment(new LoginChildOne());
+                commitJChildFragment(new LoginChildOne());
             }
         });
         return content;

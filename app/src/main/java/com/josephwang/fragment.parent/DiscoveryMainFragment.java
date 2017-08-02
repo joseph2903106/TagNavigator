@@ -39,7 +39,7 @@ public class DiscoveryMainFragment extends JParentFragment
             @Override
             public void onClick(View v)
             {
-                commitChildFragment(new DiscoveryMainChildOne());
+                commitJChildFragment(new DiscoveryMainChildOne());
             }
         });
         return content;

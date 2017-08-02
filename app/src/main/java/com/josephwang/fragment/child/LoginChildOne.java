@@ -48,7 +48,7 @@ public class LoginChildOne extends JChildFragment<LoginFragment>
             @Override
             public void onClick(View v)
             {
-                commitChildFragment(new LoginChildTwo());
+                commitJChildFragment(new LoginChildTwo());
             }
         });
         return content;

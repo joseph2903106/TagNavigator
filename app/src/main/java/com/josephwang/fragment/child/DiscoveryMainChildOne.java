@@ -48,7 +48,7 @@ public class DiscoveryMainChildOne extends JChildFragment<DiscoveryMainFragment>
             @Override
             public void onClick(View v)
             {
-                commitChildFragment(new DiscoveryMainChildTwo());
+                commitJChildFragment(new DiscoveryMainChildTwo());
             }
         });
         return content;
