@@ -1,5 +1,6 @@
 package com.josephwang;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -12,6 +13,7 @@ import com.josephwang.fragment.parent.MainPageFragment;
 import com.josephwang.fragment.parent.MyListMainFragment;
 import com.josephwang.fragment.parent.WineCategoryFragment;
 import com.josephwang.framework.JTabActivity;
+import com.josephwang.util.ui.JDialog;
 import com.tabnavigator.R;
 
 import butterknife.BindView;
@@ -116,6 +118,29 @@ public class MainActivity extends JTabActivity
             }
         }
     };
+
+    @Override
+    public void showExitReminid()
+    {
+        JDialog.showMessage(this, "Message", "Exit or not ?", "confirm", "cancel",
+                new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        dialog.dismiss();
+                        exitApp();
+                    }
+                },
+                new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        dialog.dismiss();
+                    }
+                });
+    }
 
     @Override
     public int getFragmentId()

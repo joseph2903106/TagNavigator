@@ -1,4 +1,4 @@
-package com.josephwang.fragment.parent;
+package com.josephwang.fragment.child;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,8 +7,8 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.josephwang.fragment.child.WineCategoryChildFragment;
-import com.josephwang.framework.JParentFragment;
+import com.josephwang.fragment.parent.MainPageFragment;
+import com.josephwang.framework.JChildFragment;
 import com.tabnavigator.R;
 
 import butterknife.BindView;
@@ -16,10 +16,10 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 /**
- * Created by josephwang on 2017/5/8.
+ * Created by josephwang on 2017/8/2.
  */
 
-public class WineCategoryFragment  extends JParentFragment
+public class MainPageChildTwoFragment extends JChildFragment<MainPageFragment>
 {
     @BindView(R.id.back)
     RelativeLayout back;
@@ -34,12 +34,21 @@ public class WineCategoryFragment  extends JParentFragment
         View content = inflater.inflate(R.layout.parent_main, container, false);
         unbinder = ButterKnife.bind(this, content);
         status.setText("" + TAG);
+        back.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                backToPreviousFragment();
+            }
+        });
+
         status.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                commitJChildFragment(new WineCategoryChildFragment());
+                commitJChildFragment(new DiscoveryMainChildTwo());
             }
         });
         return content;
