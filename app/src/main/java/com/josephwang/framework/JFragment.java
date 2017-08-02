@@ -34,10 +34,10 @@ public abstract class JFragment extends Fragment implements View.OnKeyListener
         super();
         TAG = ((Object) this).getClass().getSimpleName();
     }
-
-    public JActivity getJActivity()
+    
+    public  <T extends JActivity> T getJActivity()
     {
-        return (JActivity) getActivity();
+        return (T) getActivity();
     }
 
 

@@ -16,27 +16,50 @@ public abstract class JTabActivity extends JActivity implements ITabHostTransact
     public boolean onKeyDown(int keyCode, KeyEvent event)
     {
         if (keyCode == KeyEvent.KEYCODE_BACK ||
-            event.getAction() == KeyEvent.KEYCODE_BACK)
+                event.getAction() == KeyEvent.KEYCODE_BACK)
         {
             Fragment fragment = getCurrentFragment();
-            JLog.d(JLog.TAG, "onKeyDown fragment != null " + (fragment != null));
+
+            JLog.d("Tab onKeyDown fragment != null " + (fragment != null));
             if (fragment != null)
             {
-                JLog.d(JLog.TAG, "onKeyDown fragment instanceof JChildFragment " + (fragment instanceof JChildFragment));
-                JLog.d(JLog.TAG, "onKeyDown fragment getSimpleName " + (fragment.getClass().getSimpleName()));
-                if (fragment instanceof JChildFragment)
+                JLog.d("Tab onKeyDown fragment getSimpleName " + (fragment.getClass().getSimpleName()));
+            }
+
+            if (fragment != null &&
+                    fragment instanceof JChildFragment)
+            {
+                JChildFragment child = (JChildFragment) fragment;
+                JParentFragment parent = child.getJParentFragment();
+                if (child.hasChildFragment())
                 {
-                    JChildFragment child = (JChildFragment) fragment;
-                    JLog.d(JLog.TAG, "onKeyDown child.hasChildFragment " + (child.hasChildFragment()));
-                    if (child.hasChildFragment())
+                    if (parent.getHistoryList().size() == 1)
+                    {
+                        showExitReminid();
+                    }
+                    else
                     {
                         child.backToPreviousFragment();
-                        return true;
                     }
+                    return true;
                 }
+                else
+                {
+                    child.backToPreviousFragment(parent.getClass());
+                    return true;
+                }
+            }
+            else
+            {
+                showExitReminid();
+                return true;
             }
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    public void showExitReminid()
+    {
     }
 
     public void commitCurrentFragmentByParent(JParentFragment fragment)
@@ -50,6 +73,26 @@ public abstract class JTabActivity extends JActivity implements ITabHostTransact
         {
             JParentFragment parent = getHistoryFragment(fragment.getClass());
             commitFragmentTransaction(parent.getCurrentFragment(), type);
+        }
+        else
+        {
+            commitFragmentTransaction(fragment, type);
+        }
+    }
+
+    public void commitParentFragment(JParentFragment fragment)
+    {
+        commitParentFragment(fragment, FragmentAnimationType.None);
+    }
+
+    public void commitParentFragment(JParentFragment fragment, FragmentAnimationType type)
+    {
+        if (getHistoryFragment(fragment.getClass()) != null)
+        {
+            JParentFragment parent = getHistoryFragment(fragment.getClass());
+            parent.clearHistory();
+            parent.setCurrentFragment(parent);
+            commitFragmentTransaction(parent, type);
         }
         else
         {

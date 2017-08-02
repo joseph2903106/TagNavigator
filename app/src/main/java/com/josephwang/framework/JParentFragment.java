@@ -1,6 +1,7 @@
 package com.josephwang.framework;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 
 import com.josephwang.util.JLog;
 import com.josephwang.util.JUtil;
@@ -13,17 +14,30 @@ import java.util.ArrayList;
 
 public abstract class JParentFragment extends JFragment
 {
-    private final ArrayList<JFragment> historyList = new ArrayList<JFragment>();
-    private JFragment current;
+    protected final ArrayList<JFragment> historyList = new ArrayList<JFragment>();
+    protected JFragment current;
 
-    public ArrayList<JFragment> getHistoryList()
+    public final ArrayList<JFragment> getHistoryList()
     {
         return historyList;
     }
 
-    public void addHistory(JFragment fragment)
+    public final void addHistory(JFragment fragment)
     {
         historyList.add(fragment);
+    }
+
+    public final void popUpHistory()
+    {
+        if (JUtil.notEmpty(historyList))
+        {
+            historyList.remove(getHistoryListLength() - 1);
+        }
+    }
+
+    public int getHistoryListLength()
+    {
+        return historyList.size();
     }
 
     @Override
@@ -56,12 +70,17 @@ public abstract class JParentFragment extends JFragment
         historyList.remove(idnex);
     }
 
-    public final void commitChildFragment(JFragment fragment)
+    public final void commitJChildFragment(JFragment fragment)
     {
-        commitChildFragment(fragment, true);
+        commitJChildFragment(fragment, true);
     }
 
-    public final void commitChildFragment(JFragment fragment, boolean isSelfAddToHistory)
+    public final boolean containChildFragment(JFragment fragment)
+    {
+        return historyList.contains(fragment);
+    }
+
+    public final void commitJChildFragment(JFragment fragment, boolean isSelfAddToHistory)
     {
         JTabActivity tab = getJTabActivity();
         if (tab != null)
@@ -132,24 +151,41 @@ public abstract class JParentFragment extends JFragment
         }
     }
 
-    public final void backToPreviousFragment()
+    public void backToPreviousFragment()
+    {
+        backToPreviousFragment(null);
+    }
+
+    public <T extends Fragment> void backToPreviousFragment(Class<T> fragmentClass)
     {
         JTabActivity tab = getJTabActivity();
+        JLog.d(TAG, "backToPreviousFragment JUtil.notEmpty(historyList) " + JUtil.notEmpty(historyList));
+
         if (JUtil.notEmpty(historyList))
         {
             int lastOne = historyList.size() - 2;
+            JLog.d(TAG, "backToPreviousFragment lastOne " + lastOne);
             if (lastOne >= 0 && lastOne < historyList.size())
             {
-                final JFragment fragment = historyList.get(lastOne);
-                if (fragment.TAG.equals(TAG))
+                JFragment fragment = historyList.get(lastOne);
+                JLog.d(TAG, "backToPreviousFragment (fragment != null) " + (fragment != null));
+                if (fragment != null)
                 {
-                    commitSelfFragment();
+                    fragment = getJActivity().getHistoryFragment(fragment.getClass());
+                    if (fragment.TAG.equals(TAG))
+                    {
+                        commitSelfFragment();
+                    }
+                    else
+                    {
+                        current = fragment;
+                        tab.commitFragment(getJTabActivity().getFragmentId(), fragment, FragmentAnimationType.RightIn);
+                        historyList.remove(historyList.size() - 1);
+                    }
                 }
                 else
                 {
-                    current = fragment;
-                    tab.commitFragment(getJTabActivity().getFragmentId(), fragment, FragmentAnimationType.RightIn);
-                    historyList.remove(historyList.size() - 1);
+                    commitSelfFragment();
                 }
             }
             else
@@ -166,16 +202,32 @@ public abstract class JParentFragment extends JFragment
                 }
             }
         }
+        else
+        {
+            if (fragmentClass != null)
+            {
+                JFragment jFragment = (JFragment) getJActivity().getHistoryFragment(fragmentClass);
+                getJTabActivity().commitFragmentTransaction(jFragment, FragmentAnimationType.RightIn);
+            }
+        }
     }
 
-    private void commitSelfFragment()
+    protected void commitSelfFragment()
     {
         JTabActivity tab = getJTabActivity();
         if (tab != null)
         {
             clearHistory();
-            current = this;
-            tab.commitFragment(getJTabActivity().getFragmentId(), this, FragmentAnimationType.RightIn);
+            setCurrentFragment();
+            JFragment fragment = getJActivity().getHistoryFragment(getClass());
+            if (fragment != null)
+            {
+                tab.commitFragment(getJTabActivity().getFragmentId(), fragment, FragmentAnimationType.RightIn);
+            }
+            else
+            {
+                tab.commitFragment(getJTabActivity().getFragmentId(), this, FragmentAnimationType.RightIn);
+            }
         }
     }
 }
