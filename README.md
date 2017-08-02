@@ -18,3 +18,8 @@
 
 
 模仿IOS NavigationController 的Library
+
+DEMO
+-----
+
+![alt tag](https://raw.github.com/joseph2903106/TagNavigator/master/screenshots/tab_tutorial.gif)
