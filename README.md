@@ -18,6 +18,8 @@
 
 
 模仿IOS NavigationController 的Library
+UI 和Fragment 得堆疊是切開的，所以可以任意設計，控制Fragment 堆疊的UI元件
+
 
 DEMO
 -----
