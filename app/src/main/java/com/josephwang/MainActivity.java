@@ -86,7 +86,6 @@ public class MainActivity extends JTabActivity
         discoverButton.setOnClickListener(clickListener);
         mylistButton.setOnClickListener(clickListener);
         accountButton.setOnClickListener(clickListener);
-
         discoverButton.performClick();
     }
 
