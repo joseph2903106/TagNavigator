@@ -1,13 +1,13 @@
 package com.josephwang.framework;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 
 import com.josephwang.util.JLog;
 import com.josephwang.util.JUtil;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+
 
 /**
  * Created by josephwang on 2017/3/28.
@@ -55,12 +55,12 @@ public abstract class JChildFragment<Parent extends JParentFragment> extends JFr
         }
     }
 
-    public void checkParent()
+    private void checkParent()
     {
         Type sooper = getClass().getGenericSuperclass();
         if (!(sooper instanceof ParameterizedType))
         {
-            throw new IllegalArgumentException("ChildFragment must have been assigned to JParentFragment with Genric name !!!");
+            throw new IllegalArgumentException("ChildFragment must have been assigned to JParentFragment with Generic name !!!");
         }
     }
 
@@ -97,49 +97,12 @@ public abstract class JChildFragment<Parent extends JParentFragment> extends JFr
         return this;
     }
 
-    public final void removeHistory(JFragment fragment)
-    {
-        if (getJTabActivity() != null)
-        {
-            JParentFragment parent = getJParentFragment();
-            parent.removeHistory(fragment);
-        }
-    }
-
-    public final void removeHistory(int index)
-    {
-        if (getJTabActivity() != null)
-        {
-            JParentFragment parent = getJParentFragment();
-            parent.removeHistory(index);
-        }
-    }
-
     public final void clearHistory()
     {
         if (getJTabActivity() != null)
         {
             JParentFragment parent = getJParentFragment();
             parent.clearHistory();
-        }
-    }
-
-    public int getHistoryListLength()
-    {
-        if (getJTabActivity() != null)
-        {
-            JParentFragment parent = getJParentFragment();
-            return parent.getHistoryListLength();
-        }
-        return 0;
-    }
-
-    public final void popUpHistory()
-    {
-        if (getJTabActivity() != null)
-        {
-            JParentFragment parent = getJParentFragment();
-            parent.popUpHistory();
         }
     }
 
@@ -156,7 +119,7 @@ public abstract class JChildFragment<Parent extends JParentFragment> extends JFr
         }
     }
 
-    public final <T extends Fragment> void backToPreviousFragment(Class<T> fragmentClass)
+    public final <T extends JFragment> void backToPreviousFragment(Class<T> fragmentClass)
     {
         if (getJTabActivity() != null)
         {
